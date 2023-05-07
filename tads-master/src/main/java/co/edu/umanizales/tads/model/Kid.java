@@ -13,4 +13,8 @@ public class Kid {
     private char gender;
     private Location location;
     private GenderKid genderKid;
+
+    public Kid(String identification, String name, byte age, GenderKid gender, Location location) {
+
+    }
 }

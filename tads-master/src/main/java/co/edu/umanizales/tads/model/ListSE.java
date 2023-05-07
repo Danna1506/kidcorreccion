@@ -1,9 +1,10 @@
  package co.edu.umanizales.tads.model;
 
-import ch.qos.logback.core.joran.spi.ElementSelector;
 import lombok.Data;
 
-@Data
+
+
+ @Data
 public class ListSE {
     private Node head;
     private int size;
@@ -14,7 +15,6 @@ public class ListSE {
             while (temp.getNext() != null) {
                 temp = temp.getNext();
             }
-            /// Parado en el último
             Node newNode = new Node(kid);
             temp.setNext(newNode);
         } else {
@@ -47,22 +47,6 @@ public class ListSE {
         }
     }
 
-    public void orderBoysToStart() {
-        if (this.head != null) {
-            ListSE listCp = new ListSE();
-            Node temp = this.head;
-            while (temp != null) {
-                if (temp.getData().getGender() == 'M') {
-                    listCp.addToStart(temp.getData());
-                } else {
-                    listCp.add(temp.getData());
-                }
-
-                temp = temp.getNext();
-            }
-            this.head = listCp.getHead();
-        }
-    }
 
     public void changeExtremes() {
         if (this.head != null && this.head.getNext() != null) {
@@ -137,6 +121,23 @@ public class ListSE {
         }
 
     }
+    public float averAge(){
+
+        if (head != null){
+            Node temp = head;
+            int contador = 0;
+            int ages = 0;
+            while(temp.getNext() != null) {
+                contador++;
+                ages = ages + temp.getData().getAge();
+                temp = temp.getNext();
+            }
+            return (float) ages/contador;
+        }
+        else{
+            return (float) 0;
+        }
+    }
     public int getKidsByGenderCity( int age, String code, String codegender){
         int count = 0;
         if (this.head != null) {
@@ -151,8 +152,164 @@ public class ListSE {
         }
         return count;
     }
+    public void boyStartGirlsLast(){
+        ListSE listCopy = new ListSE();
+        Node temp = this.head;
+        while (temp != null){
+            if (temp.getData().getGender() == 'M'){
+                listCopy.add(temp.getData());
+            }
+            temp = temp.getNext();
+        }
+        temp = this.head;
 
-}
+        while (temp != null){
+            if (temp.getData().getGender() == 'F'){
+                listCopy.add((temp.getData()));
+            }
+            temp = temp.getNext();
+        }
+        this.head = listCopy.getHead();
+    }
+
+
+
+
+        public float deleteByAge (int age) {
+            Node temp = head;
+            Node prev = null;
+            while (temp != null && temp.getData().getAge() != age) {
+                prev = temp;
+                temp = temp.getNext();
+            }
+            if (temp != null) {
+                if (prev == null) {
+                    head = temp.getNext();
+                } else {
+                    prev.setNext(temp.getNext());
+                }
+            }
+        }
+
+
+            public void sendfinletter ( char initial){
+
+                ListSE sendfinletter = new ListSE();
+                Node temp = this.head;
+
+                while (temp != null) {
+                    if (temp.getData().getName().charAt(0) != Character.toUpperCase(initial)) {
+                        sendfinletter.add(temp.getData());
+                    }
+                    temp = temp.getNext();
+                }
+
+                temp = this.head;
+
+                while (temp != null) {
+                    if (temp.getData().getName().charAt(0) == Character.toUpperCase(initial)) {
+                        sendfinletter.add(temp.getData());
+                    }
+                    temp = temp.getNext();
+                }
+
+                this.head = sendfinletter.getHead();
+            }
+            public int rangeByAge ( int min, int max){
+                Node temp = head;
+                int counter = 0;
+                while (temp != null) {
+                    if (temp.getData().getAge() > min && temp.getData().getAge() < max) {
+                        counter++;
+                    }
+                    temp = temp.getNext();
+                }
+                return counter;
+            }
+    public void forwardPositions(String identification, int positions) {
+        if (head == null) {
+            // La lista está vacía, no hay nada que hacer
+            return;
+        }
+
+        // Busca el nodo con la identificación especificada
+        Node temp = head;
+        while (temp != null && !temp.getData().getIdentification().equals(identification)) {
+            temp = temp.getNext();
+        }
+
+        if (temp == null) {
+            // No se encontró ningún nodo con la identificación especificada, no hay nada que hacer
+            return;
+        }
+
+        // Determina la nueva posición del nodo después de moverlo hacia adelante
+        int newPosition = positions.get(temp) + positions;
+        if (newPosition >= size) {
+            // El nodo terminaría después del final de la lista, así que se mueve al principio
+            addToStart(temp.getData());
+        } else {
+            // Mueve el nodo a su nueva posición
+           deleteByIdentification(String.valueOf(temp));
+            addByPosition(temp.getData(), newPosition);
+        }
+    }
+
+
+
+     public void afterwardsPositions(String identification, int positions){
+        if (head!=null){
+            if(positions<size){
+                if(head.getData().getIdentification()==identification){
+                    Node node = new Node(head.getNext().getData());
+                    addByPosition(node.getData(), positions+1);
+                    head = head.getNext();
+                }
+                else{
+                    int count = 1;
+                    Node temp = head;
+                    while(temp.getNext().getData().getIdentification()!=identification){
+                        temp = temp.getNext();
+                        count++;
+                        if(temp.getNext()!=null){
+                            return;
+                        }
+                    }
+                    Node temp2=new Node(temp.getNext().getData());
+                    temp.setNext(temp.getNext().getNext());
+                    add(temp2.getData());
+                }
+            }
+            else{
+                return;
+            }
+        }
+    }
+     public void InterlayerBoyAndGirl() {
+         if (head == null || head.getNext() == null) {
+             return; // Lista vacía o con solo un elemento, no hay nada que hacer
+         }
+         Node nodetemp = head;
+         Node next = nodetemp.getNext();
+         boolean nodetempIsBoy = nodetemp.getData().equals("niño");
+         while (next != null) {
+             boolean nextIsBoy = next.getData().equals("niño");
+             if ((nodetempIsBoy && !nextIsBoy) || (!nodetempIsBoy && nextIsBoy)) {
+                 String temp = String.valueOf(nodetemp.getData());
+                 nodetemp.setData(next.getData());
+                 next.setData(nodetemp.getData());
+             }
+             nodetemp = next;
+             next = nodetemp.getNext();
+             nodetempIsBoy = nodetemp.getData().equals("niño");
+         }
+     }
+ }
+
+
+
+
+
 
 
 
