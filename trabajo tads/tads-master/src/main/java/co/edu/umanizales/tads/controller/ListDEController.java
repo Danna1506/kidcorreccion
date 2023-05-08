@@ -190,4 +190,16 @@ public class ListDEController {
                     500, "Ha ocurrido un error al intercambiar los extremos", null), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    @GetMapping(path = "deleteNodeDE ")
+    public ResponseEntity<ResponseDTO>deleteNodeDE(@PathVariable String code)  {
+        try {
+            listDEService.deletePetByIdentification(code);
+            return new ResponseEntity<>(new ResponseDTO(
+                    200, "Las mascotas con el código" + code + "han sido eliminados.",
+                    null), HttpStatus.OK);
+        } catch (ListSEException e) {
+            return new ResponseEntity<>(new ResponseDTO(
+                    500, "Error al eliminar las mascotas.",
+                    null), HttpStatus.INTERNAL_SERVER_ERROR);
         }
+}

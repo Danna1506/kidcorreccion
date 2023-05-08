@@ -269,7 +269,53 @@ public class ListDE {
         headNext.setPrevious(temp);
     }
 
+     /* debo mirar si el primer nodo a eliminar es cabeza
+     * si es asi le doy el valor de cabeza al siguiente nodo
+        si el nodo a eliminar esta en medio de la lista actualizo los enlaces de el nodo previo y siguiente
+        * para que queden conectados entre ellos, y elimino en donde se encuentra actualmente parado el temporal
+        * si el que deseo elimina es el final, le doy el valor de final al nodo previo    */
+
+    public void deleteNodeDE(int identification) {
+        Node temp = head;
+
+        while (temp != null) {
+            if (temp.getId() == identification) {
+                // Si el nodo a eliminar es el primer nodo en la lista
+                if (temp == head) {
+                    head = temp.getNext();
+                    if (head != null) {
+                        head.setPrevious(null);
+                    }
+                    else {
+                        cola = null;
+                    }
+                }
+                // Si el nodo a eliminar es el último nodo en la lista
+                else if (temp == cola) {
+                    cola = temp.getPrevious();
+                    cola.setNext(null);
+                }
+                // El nodo a eliminar está en el medio de la lista
+                else {
+                    temp.getPrevious().setNext(temp.getNext());
+                    temp.getNext().setPrevious(temp.getPrevious());
+                }
+
+                // Desreferencia el nodo eliminado
+                temp.setPrevious(null);
+                temp.setNext(null);
+
+                return;
+            }
+            else {
+                temp = temp.getNext();
+            }
+        }
+    }
 
 }
+
+
+
 
 
